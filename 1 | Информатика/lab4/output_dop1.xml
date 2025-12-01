@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<all>
+	<schedule type="dict">
+		<wednesday type="dict">
+			<first_lesson type="dict">
+				<time type="dict">
+					<from type="str">8:20</from>
+					<to type="str">9:50</to>
+					<week type="list">
+						<item type="int">2</item>
+						<item type="int">4</item>
+						<item type="int">6</item>
+						<item type="int">8</item>
+						<item type="int">10</item>
+						<item type="int">12</item>
+						<item type="int">14</item>
+						<item type="int">16</item>
+					</week>
+				</time>
+				<location type="dict">
+					<classroom type="str">Ауд. \&lt;Актовый зал (1216/0 (усл))</classroom>
+					<campus type="str"> ул.Ломоносова, д.9, лит. М</campus>
+				</location>
+				<title type="str">Информатика</title>
+				<teacher type="str">Балакшин Павел Валерьевич</teacher>
+				<lesson-format type="str">Очный</lesson-format>
+			</first_lesson>
+			<second_lesson type="dict">
+				<time type="dict">
+					<from type="str">10:00</from>
+					<to type="str">11:30</to>
+					<week type="list">
+						<item type="int">2</item>
+						<item type="int">4</item>
+						<item type="int">6</item>
+						<item type="int">8</item>
+						<item type="int">10</item>
+						<item type="int">12</item>
+						<item type="int">14</item>
+						<item type="int">16</item>
+					</week>
+				</time>
+				<location type="dict">
+					<classroom type="str">Ауд. Актовый зал (1216/0 (усл))</classroom>
+					<campus type="str"> ул.Ломоносова, д.9, лит. М</campus>
+				</location>
+				<title type="str">Основы профессиональной деятельности</title>
+				<teacher type="str">Клименков Сергей Викторович</teacher>
+				<lesson-format type="str">Очный</lesson-format>
+			</second_lesson>
+			<third_lesson type="dict">
+				<time type="dict">
+					<from type="str">11:40</from>
+					<to type="str">13:10</to>
+					<week type="list">
+						<item type="int">14</item>
+					</week>
+				</time>
+				<location type="dict">
+					<classroom type="str">Ауд. Тренажерный зал (4404)</classroom>
+					<campus type="str">ул.Ломоносова, д.9, лит. Б</campus>
+				</location>
+				<title type="str">Фитнес (функциональная тренировка)</title>
+				<teacher type="str">Яковлев Игорь Сергеевич</teacher>
+				<lesson-format type="str">Очный</lesson-format>
+			</third_lesson>
+		</wednesday>
+		<friday type="dict">
+			<third_lesson type="dict">
+				<time type="dict">
+					<from type="str">11:40</from>
+					<to type="str">13:10</to>
+					<week type="list">
+						<item type="int">1</item>
+						<item type="int">2</item>
+						<item type="int">3</item>
+						<item type="int">4</item>
+						<item type="int">5</item>
+						<item type="int">6</item>
+						<item type="int">7</item>
+						<item type="int">8</item>
+						<item type="int">9</item>
+						<item type="int">10</item>
+						<item type="int">11</item>
+						<item type="int">12</item>
+						<item type="int">13</item>
+						<item type="int">14</item>
+						<item type="int">15</item>
+						<item type="int">16</item>
+						<item type="int">17</item>
+						<item type="int">18</item>
+					</week>
+				</time>
+				<location type="dict">
+					<classroom type="str">Ауд.4307</classroom>
+					<campus type="str">ул.Ломоносова, д.9, лит. Б</campus>
+				</location>
+				<title type="str">Линейная алгебра</title>
+				<teacher type="str">Шаврин Андрей Андреевич</teacher>
+				<lesson-format type="str">Очный</lesson-format>
+			</third_lesson>
+			<fourth_lesson type="dict">
+				<time type="dict">
+					<from type="str">13:30</from>
+					<to type="str">15:00</to>
+					<week type="list">
+						<item type="int">14</item>
+					</week>
+				</time>
+				<location type="dict">
+					<classroom type="str">Ауд. Борцовский зал (4506/1)</classroom>
+					<campus type="str">ул.Ломоносова, д.9, лит. Б</campus>
+				</location>
+				<title type="str">Фитнес (функциональная тренировка)</title>
+				<teacher type="str">Варушин Артем Владимирович</teacher>
+				<lesson-format type="str">Очный</lesson-format>
+			</fourth_lesson>
+			<fifth_lesson type="dict">
+				<time type="dict">
+					<from type="str">15:20</from>
+					<to type="str">16:50</to>
+					<week type="list">
+						<item type="int">1</item>
+						<item type="int">2</item>
+						<item type="int">3</item>
+						<item type="int">4</item>
+						<item type="int">5</item>
+						<item type="int">6</item>
+						<item type="int">7</item>
+						<item type="int">8</item>
+						<item type="int">9</item>
+						<item type="int">10</item>
+						<item type="int">11</item>
+						<item type="int">12</item>
+						<item type="int">13</item>
+						<item type="int">14</item>
+						<item type="int">15</item>
+						<item type="int">16</item>
+						<item type="int">17</item>
+						<item type="int">18</item>
+					</week>
+				</time>
+				<location type="dict">
+					<classroom type="str">Ауд. 3308</classroom>
+					<campus type="str">ул.Ломоносова, д.9, лит. Е</campus>
+				</location>
+				<title type="str">Английский язык B1.2</title>
+				<teacher type="str">Бревнова Татьяна Сергеевна</teacher>
+				<lesson-format type="str">Очный</lesson-format>
+			</fifth_lesson>
+			<sixth_lesson type="dict">
+				<time type="dict">
+					<from type="str">17:00</from>
+					<to type="str">18:30</to>
+					<week type="list">
+						<item type="int">1</item>
+						<item type="int">2</item>
+						<item type="int">3</item>
+						<item type="int">4</item>
+						<item type="int">5</item>
+						<item type="int">6</item>
+						<item type="int">7</item>
+						<item type="int">8</item>
+						<item type="int">9</item>
+						<item type="int">10</item>
+						<item type="int">11</item>
+						<item type="int">12</item>
+						<item type="int">13</item>
+						<item type="int">14</item>
+						<item type="int">15</item>
+						<item type="int">16</item>
+						<item type="int">17</item>
+						<item type="int">18</item>
+					</week>
+				</time>
+				<location type="dict">
+					<classroom type="str">Ауд. 3308</classroom>
+					<campus type="str">ул.Ломоносова, д.9, лит. Е</campus>
+				</location>
+				<title type="str">Английский язык B1.2</title>
+				<teacher type="str">Бревнова Татьяна Сергеевна</teacher>
+				<lesson-format type="str">Очный</lesson-format>
+			</sixth_lesson>
+		</friday>
+	</schedule>
+</all>
