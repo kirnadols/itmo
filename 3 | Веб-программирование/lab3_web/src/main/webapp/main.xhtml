@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <title>Лабораторная работа №3 - Проверка точки</title>
+    <link rel="stylesheet" href="css/reset.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
+</h:head>
+
+<h:body>
+    <header>
+        <h1>Надольский Кирилл Николаевич</h1>
+        <p>Группа: P3209 | Вариант: 466824</p>
+    </header>
+
+    <main>
+        <section class="content-area">
+            <div class="graph-container">
+                <h2>Область на координатной плоскости</h2>
+                <canvas id="graphCanvas" width="300" height="300"></canvas>
+            </div>
+
+            <div class="form-container">
+                <h2>Параметры (Вариант по картинке)</h2>
+
+                <h:messages globalOnly="true" styleClass="error" />
+
+                <h:form id="shot-form" prependId="false">
+                    <h:inputHidden id="hiddenX" value="#{areaCheckBean.x}" />
+                    <h:inputHidden id="hiddenY" value="#{areaCheckBean.y}" />
+                    <h:inputHidden id="hiddenR" value="#{areaCheckBean.r}" />
+                    <h:inputHidden id="pointsJson" value="#{areaCheckBean.jsonResults}" />
+
+                    <p:remoteCommand name="sendClick"
+                                     action="#{areaCheckBean.checkPoint}"
+                                     update="resultsTable pointsJson @form"
+                                     oncomplete="drawGraph()"
+                                     process="@this hiddenX hiddenY hiddenR"/>
+
+                    <div class="form-group">
+                        <label for="x-input">Значение X (-2 ... 2)</label>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <h:inputText id="x-input" value="#{areaCheckBean.x}" style="width: 80px; text-align: center;">
+                                <f:validateDoubleRange minimum="-2" maximum="2" />
+                            </h:inputText>
+                            <p:slider for="x-input" minValue="-2" maxValue="2" step="0.5" range="false" style="width: 200px;" />
+                        </div>
+                        <h:message for="x-input" styleClass="error" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="y-value">Значение Y (-3 ... 3)</label>
+                        <h:inputText id="y-value" value="#{areaCheckBean.y}"
+                                     required="true"
+                                     requiredMessage="Ошибка: Введите значение Y!"
+                                     converterMessage="Ошибка: Y должен быть числом!"
+                                     validatorMessage="Ошибка: Y должен быть от -3 до 3!">
+                            <f:validateDoubleRange minimum="-3" maximum="3" />
+                        </h:inputText>
+                        <h:message for="y-value" styleClass="error" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="r-value">Значение R (1 ... 4)</label>
+                        <h:inputText id="r-value" value="#{areaCheckBean.r}"
+                                     required="true"
+                                     requiredMessage="Ошибка: Введите значение R!"
+                                     converterMessage="Ошибка: R должен быть числом!"
+                                     validatorMessage="Ошибка: R должен быть от 1 до 4!">
+                            <f:validateDoubleRange minimum="1" maximum="4" />
+                            <p:ajax event="keyup" oncomplete="drawGraph()" />
+                        </h:inputText>
+                        <h:message for="r-value" styleClass="error" />
+                    </div>
+
+                    <div class="form-actions">
+                        <h:commandButton value="Проверить" action="#{areaCheckBean.checkPoint}" styleClass="submit-btn">
+                            <f:ajax execute="@form" render="@form resultsTable pointsJson" onevent="onAjaxSuccess" />
+                        </h:commandButton>
+                        <br/><br/>
+                        <h:commandLink action="goToIndex" value="Вернуться на стартовую" style="color: #00796b; text-decoration: none;" />
+                    </div>
+                </h:form>
+            </div>
+        </section>
+
+        <section class="results-area">
+            <h2>История проверок</h2>
+            <div class="table-wrapper">
+                <h:dataTable id="resultsTable" value="#{areaCheckBean.results}" var="res" styleClass="results-table">
+                    <h:column>
+                        <f:facet name="header">X</f:facet>
+                        <h:outputText value="#{res.x}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Y</f:facet>
+                        <h:outputText value="#{res.y}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">R</f:facet>
+                        <h:outputText value="#{res.r}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Результат</f:facet>
+                        <span class="#{res.result ? 'hit-true' : 'hit-false'}">
+                            #{res.resultString}
+                        </span>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Время</f:facet>
+                        #{res.queryTime}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Audit Hash</f:facet>
+                        <span title="#{res.currentHash}" style="font-size: 10px; font-family: monospace;">
+                            #{res.currentHash.length() > 8 ? res.currentHash.substring(0, 8).concat('...') : res.currentHash}
+                        </span>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Proof</f:facet>
+                        <h:commandButton value="Get Proof" onclick="alert('#{areaCheckBean.getProof(res)}'); return false;" style="font-size: 0.8em; padding: 2px 5px;"/>
+                    </h:column>
+                </h:dataTable>
+            </div>
+        </section>
+    </main>
+
+    <h:panelGroup id="drawScript">
+        <script type="text/javascript">
+            // <![CDATA[
+            function drawGraph() {
+                const canvas = document.getElementById('graphCanvas');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                const width = canvas.width;
+                const height = canvas.height;
+                const center = width / 2;
+                const scale = 30;
+
+                let rInput = document.getElementById('r-value');
+                if (!rInput) return;
+
+                let rVal = rInput.value.replace(',', '.');
+                let r = parseFloat(rVal);
+
+                if (isNaN(r) || r < 1 || r > 4) {
+                    return;
+                }
+
+                ctx.clearRect(0, 0, width, height);
+
+                drawAreas(ctx, r, center, scale);
+                drawAxes(ctx, width, height, center, scale, r);
+                drawPoints(ctx, center, scale);
+            }
+
+            function drawAreas(ctx, r, center, scale) {
+                ctx.fillStyle = "#2196F3";
+                ctx.fillRect(center, center - r * scale, (r/2) * scale, r * scale);
+                ctx.beginPath();
+                ctx.moveTo(center, center);
+                ctx.arc(center, center, r * scale, Math.PI, 1.5 * Math.PI);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(center, center);
+                ctx.lineTo(center - (r/2) * scale, center);
+                ctx.lineTo(center, center + (r/2) * scale);
+                ctx.fill();
+            }
+
+            function drawAxes(ctx, w, h, center, scale, r) {
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 1;
+                ctx.fillStyle = "black";
+                ctx.font = "12px Arial";
+
+                ctx.beginPath(); ctx.moveTo(0, center); ctx.lineTo(w, center); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(center, h); ctx.lineTo(center, 0); ctx.stroke();
+
+                ctx.fillText("X", w - 10, center - 5);
+                ctx.fillText("Y", center + 5, 10);
+
+                if (!isNaN(r) && r > 0) {
+                    drawTick(ctx, center + r * scale, center, "R");
+                    drawTick(ctx, center + (r/2) * scale, center, "R/2");
+                    drawTick(ctx, center - r * scale, center, "-R");
+                    drawTick(ctx, center - (r/2) * scale, center, "-R/2");
+
+                    drawTick(ctx, center, center - r * scale, "R");
+                    drawTick(ctx, center, center - (r/2) * scale, "R/2");
+                    drawTick(ctx, center, center + (r/2) * scale, "-R/2");
+                    drawTick(ctx, center, center + r * scale, "-R");
+                }
+            }
+
+            function drawTick(ctx, x, y, text) {
+                const tickSize = 4;
+                ctx.beginPath();
+                if (Math.abs(y - 150) < 1) {
+                    ctx.moveTo(x, y - tickSize); ctx.lineTo(x, y + tickSize);
+                    ctx.fillText(text, x - 5, y + 15);
+                } else {
+                    ctx.moveTo(x - tickSize, y); ctx.lineTo(x + tickSize, y);
+                    ctx.fillText(text, x + 10, y + 4);
+                }
+                ctx.stroke();
+            }
+
+            function drawPoints(ctx, center, scale) {
+                const jsonInput = document.getElementById('pointsJson');
+                if (!jsonInput || !jsonInput.value) return;
+
+                try {
+                    const points = JSON.parse(jsonInput.value);
+                    points.forEach(p => {
+                        let xCoord = center + p.x * scale;
+                        let yCoord = center - p.y * scale;
+
+                        ctx.beginPath();
+                        ctx.arc(xCoord, yCoord, 3, 0, 2 * Math.PI);
+                        ctx.fillStyle = p.result ? "#4CAF50" : "#F44336";
+                        ctx.fill();
+                        ctx.strokeStyle = "white";
+                        ctx.stroke();
+                    });
+                } catch (e) {
+                    console.error("JSON Parse Error", e);
+                }
+            }
+
+            const graphCanvas = document.getElementById('graphCanvas');
+            if (graphCanvas) {
+                graphCanvas.onclick = function(e) {
+                    let rInput = document.getElementById('r-value');
+                    let rVal = rInput.value.replace(',', '.');
+                    let r = parseFloat(rVal);
+
+                    if (isNaN(r) || r < 1 || r > 4) {
+                        alert("Ошибка: Установите корректный радиус R (1..4) для клика!");
+                        return;
+                    }
+
+                    const rect = this.getBoundingClientRect();
+                    const xClick = e.clientX - rect.left;
+                    const yClick = e.clientY - rect.top;
+
+                    const center = this.width / 2;
+                    const scale = 30;
+
+                    let valX = (xClick - center) / scale;
+                    let valY = (center - yClick) / scale;
+
+                    document.getElementById('hiddenX').value = valX.toFixed(4);
+                    document.getElementById('hiddenY').value = valY.toFixed(4);
+                    document.getElementById('hiddenR').value = r;
+
+                    sendClick();
+                };
+            }
+
+            window.onload = function() {
+                drawGraph();
+            };
+
+            function onAjaxSuccess(data) {
+                if (data.status === "success") {
+                    drawGraph();
+                }
+            }
+            // ]]>
+        </script>
+    </h:panelGroup>
+</h:body>
+</html>

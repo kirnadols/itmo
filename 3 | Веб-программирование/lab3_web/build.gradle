@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Jakarta EE 9.1 API (для Tomcat 10+)
+    compileOnly 'jakarta.platform:jakarta.jakartaee-api:9.1.0'
+
+    // PrimeFaces (версия с поддержкой Jakarta EE)
+    implementation 'org.primefaces:primefaces:13.0.0:jakarta'
+
+    // Драйвер PostgreSQL
+    implementation 'org.postgresql:postgresql:42.6.0'
+
+    // EclipseLink (JPA провайдер)
+    implementation 'org.eclipse.persistence:eclipselink:3.0.4'
+}
+
+targetCompatibility = JavaVersion.VERSION_17
+sourceCompatibility = JavaVersion.VERSION_17

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Лабораторная работа №3 - Стартовая</title>
+    <link rel="stylesheet" href="css/reset.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
+    <style>
+        .start-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+        }
+        .clock {
+            font-size: 3em;
+            color: #004d40;
+            margin: 30px 0;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <header>
+        <h1>Надольский Кирилл Николаевич</h1>
+        <p>Группа: P3209 | Вариант: 742</p>
+    </header>
+
+    <main class="start-wrapper">
+        <h:form id="clockForm">
+            <p:poll interval="6" update="clockDisplay" />
+
+            <div class="clock">
+                <h:outputText id="clockDisplay" value="#{clockBean.currentDateTime}" />
+            </div>
+
+            <div class="button-container">
+                <h:commandButton action="goToMain" value="Перейти к проверке" styleClass="submit-btn" style="width: auto; padding: 15px 40px;"/>
+            </div>
+        </h:form>
+    </main>
+</h:body>
+</html>
