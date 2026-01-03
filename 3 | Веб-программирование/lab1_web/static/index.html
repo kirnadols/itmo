@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторная работа №1</title>
+
+    <link rel="stylesheet" href="styles/reset.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        #graph-canvas {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: crosshair;
+        }
+        .graph-container p {
+            font-size: 0.9em;
+            color: #555;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Надольский Кирилл Николаевич</h1>
+    <p>Группа: P3209 | Вариант: 466824</p>
+</header>
+
+<main>
+    <section class="content-area">
+        <div class="graph-container">
+            <h2>Область на координатной плоскости</h2>
+            <canvas id="graph-canvas" width="400" height="400"></canvas>
+            <p>Текущий R: <span id="current-r-display">N/A</span></p>
+        </div>
+
+        <div class="form-container">
+            <h2>Параметры для проверки</h2>
+            <form id="shot-form">
+                <div class="form-group">
+                    <label>Значение X</label>
+                    <div class="button-group" id="x-buttons">
+                        <button type="button" data-value="-4">-4</button>
+                        <button type="button" data-value="-3">-3</button>
+                        <button type="button" data-value="-2">-2</button>
+                        <button type="button" data-value="-1">-1</button>
+                        <button type="button" data-value="0">0</button>
+                        <button type="button" data-value="1">1</button>
+                        <button type="button" data-value="2">2</button>
+                        <button type="button" data-value="3">3</button>
+                        <button type="button" data-value="4">4</button>
+                    </div>
+                    <input type="hidden" id="x-value" name="x">
+                </div>
+
+                <div class="form-group">
+                    <label for="y-value">Значение Y (от -5 до 5)</label>
+                    <input type="text" id="y-value" name="y" placeholder="например, 1.23">
+                </div>
+
+                <div class="form-group">
+                    <label>Значение R</label>
+                    <div class="radio-group" id="r-radios">
+                        <label><input type="radio" name="r" value="1"> 1</label>
+                        <label><input type="radio" name="r" value="1.5"> 1.5</label>
+                        <label><input type="radio" name="r" value="2"> 2</label>
+                        <label><input type="radio" name="r" value="2.5"> 2.5</label>
+                        <label><input type="radio" name="r" value="3"> 3</label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Проверить</button>
+                    <button type="button" id="reset-btn" class="reset-btn">Очистить историю</button>
+                    <p id="error-message" class="error"></p>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="results-area">
+        <h2>История проверок</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>X</th>
+                    <th>Y</th>
+                    <th>R</th>
+                    <th>Время</th>
+                    <th>Общее время (нс)</th>
+                    <th>Результат</th>
+                    <th class="debug-col">Время вал. (нс)</th>
+                    <th class="debug-col">Время выч. (нс)</th>
+                    <th class="debug-col">Память (байты)</th>
+                    <th class="debug-col">Поток ID</th>
+                </tr>
+                </thead>
+                <tbody id="results-table-body">
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<script defer src="index.js"></script>
+</body>
+</html>

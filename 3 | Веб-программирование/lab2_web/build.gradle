@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+    id 'war' // Плагин для создания war-архива
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // WildFly 38 использует Jakarta EE 10.
+    // compileOnly означает, что библиотеки есть на сервере, и их не надо пихать внутрь war
+    compileOnly 'jakarta.platform:jakarta.jakartaee-api:10.0.0'
+}
+
+targetCompatibility = JavaVersion.VERSION_17
+sourceCompatibility = JavaVersion.VERSION_17
+
+// Настройка имени файла, чтобы было удобно (например, lab2.war вместо lab2-1.0-SNAPSHOT.war)
+war {
+    archiveFileName = 'lab2.war'
+}
