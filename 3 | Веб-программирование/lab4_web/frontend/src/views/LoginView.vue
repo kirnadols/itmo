@@ -41,9 +41,11 @@ const handleRegister = async () => {
 <template>
     <div class="auth-container">
         <header class="header-info">
-            <h1>Web Lab 4</h1>
-            <p>Студент: Иванов И.И.</p>
-            <p>Группа: P32xx | Вариант: 12345</p>
+            <h1>Лабораторная работа №4</h1>
+            <p>Вариант: 861</p>
+            <p>Надольский Кирилл</p>
+            <p>ИСУ: 466824</p>
+            <p>Группа: P3209</p>
         </header>
 
         <div class="auth-card">
