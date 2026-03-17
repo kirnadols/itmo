@@ -1,4 +1,3 @@
-
 import sys
 import os
 
@@ -103,87 +102,183 @@ def gauss_seidel_method(A, b, epsilon, max_iterations=1000):
 
 
 def read_from_file(filename):
+    if not os.path.exists(filename):
+        raise FileNotFoundError("Файл не найден. Проверьте правильность имени и пути.")
+
     try:
         with open(filename, 'r', encoding='utf-8') as f:
             content = f.read()
     except Exception as e:
-        raise IOError(f"Ошибка при чтении файла: {e}")
+        raise IOError(f"Не удалось прочитать файл (возможно, нет прав доступа): {e}")
 
     content = content.replace(',', '.')
     tokens = content.split()
 
     if not tokens:
-        raise ValueError("Файл пуст.")
+        raise ValueError("Файл абсолютно пуст.")
 
-    n = int(tokens[0])
-    epsilon = float(tokens[1])
+    try:
+        n = int(tokens[0])
+        epsilon = float(tokens[1])
+    except ValueError:
+        raise ValueError("Первые два значения в файле должны быть размерностью (целое число) и точностью (число).")
+
+    if n <= 0 or epsilon <= 0:
+        raise ValueError("Размерность матрицы и точность в файле должны быть строго больше 0.")
+    if n > 21:
+        raise ValueError("Размерность матрицы слишком велика. Проверьте данные. (n ≤ 20)")
+
     expected_matrix_elements = n * (n + 1)
 
     if len(tokens) == 2 + expected_matrix_elements:
         max_iter = 1000
         matrix_tokens = tokens[2:]
     elif len(tokens) == 3 + expected_matrix_elements:
-        max_iter = int(tokens[2])
-        matrix_tokens = tokens[3:]
+        try:
+            max_iter = int(tokens[2])
+            matrix_tokens = tokens[3:]
+        except ValueError:
+            raise ValueError("Третий параметр (максимальное число итераций) должен быть целым числом.")
     else:
-        raise ValueError(f"Несоответствие данных. Ожидалось {expected_matrix_elements} коэффициентов.")
+        raise ValueError(
+            f"Несоответствие данных. Ожидалось {expected_matrix_elements} коэффициентов матрицы, а в файле их {len(tokens) - 2}.")
 
     A = []
     b = []
-    for i in range(n):
-        start_idx = i * (n + 1)
-        end_idx = start_idx + n
-        row = [float(val) for val in matrix_tokens[start_idx:end_idx]]
-        b_val = float(matrix_tokens[end_idx])
-        A.append(row)
-        b.append(b_val)
+
+    try:
+        for i in range(n):
+            start_idx = i * (n + 1)
+            end_idx = start_idx + n
+            row = [float(val) for val in matrix_tokens[start_idx:end_idx]]
+            b_val = float(matrix_tokens[end_idx])
+            A.append(row)
+            b.append(b_val)
+    except ValueError:
+        raise ValueError("Один или несколько элементов матрицы в файле не являются числами.")
 
     return n, epsilon, max_iter, A, b
 
+def get_input_mode():
+    while True:
+        mode = input("Ввести данные с клавиатуры (1) или из файла (2)? (Для выхода введите 0)\nВаш выбор: ").strip()
+        if mode in ('0', '1', '2'):
+            return mode
+        print("\n[ОШИБКА] Степан Дмитриевич, Вас не понимаю. Введите только одну цифру: 1, 2 или 0.\n")
+
+
+def get_valid_n():
+    while True:
+        try:
+            user_input = input("Введите размерность матрицы n (от 1 до 20): ").strip()
+            n = int(user_input)
+            if 0 < n <= 20:
+                return n
+            else:
+                print("\n[ОШИБКА] Размерность должна быть от 1 до 20 включительно.\n")
+        except ValueError:
+            print("\n[ОШИБКА] Это не целое число. Пожалуйста, введите цифрами (например, 3).\n")
+
+
+def get_valid_epsilon():
+    while True:
+        try:
+            user_input = input("Введите требуемую точность epsilon (например, 0.001): ").replace(',', '.').strip()
+            epsilon = float(user_input)
+            if epsilon > 0:
+                return epsilon
+            else:
+                print("\n[ОШИБКА] Точность должна быть строго больше нуля.\n")
+        except ValueError:
+            print("\n[ОШИБКА] Это не число. Используйте точку или запятую для десятичных дробей.\n")
+
+
+def get_valid_row(i, n):
+    while True:
+        try:
+            row_input = input(f"Строка {i + 1} ({n + 1} чисел через пробел): ").replace(',', '.').strip().split()
+
+            if len(row_input) != n + 1:
+                print(f"\n[ОШИБКА] Вы ввели {len(row_input)} чисел, а нужно ровно {n + 1}. Попробуйте еще раз.\n")
+                continue
+
+            row_floats = list(map(float, row_input))
+            return row_floats[:-1], row_floats[-1]
+        except ValueError:
+            print(f"\n[ОШИБКА] В строке обнаружен текст или недопустимые символы. Вводите только числа через пробел!\n")
+
+
+def get_valid_file_data():
+    while True:
+        filename = input("Введите имя файла (например, 19_19.txt) или '0' для отмены: ").strip()
+        if filename == '0':
+            return None
+
+        try:
+            return read_from_file(filename)
+        except Exception as e:
+            print(f"\n[ОШИБКА ЧТЕНИЯ ФАЙЛА] {e}")
+            print("Исправьте файл или укажите другой.\n")
+
 
 def main():
+    print("=" * 50)
     print("Решение СЛАУ методом Гаусса-Зейделя (Вариант 10)")
+    print("=" * 50)
 
     try:
-        mode = input("Ввести данные с клавиатуры (1) или из файла (2)? Введите 1 или 2: ").strip()
+        while True:
+            mode = get_input_mode()
 
-        if mode == '2':
-            filename = input("Введите имя файла (например, 19_19.txt): ").strip()
-            n, epsilon, max_iter, A, b = read_from_file(filename)
-            print(f"\n[INFO] Файл '{filename}' успешно прочитан.")
+            if mode == '0':
+                print("Программа завершена. До свидания!")
+                sys.exit(0)
 
-        elif mode == '1':
-            n = int(input("Введите размерность матрицы n (от 1 до 20): "))
-            epsilon = float(input("Введите требуемую точность epsilon: ").replace(',', '.'))
-            max_iter = 1000
+            if mode == '2':
+                data = get_valid_file_data()
+                if data is None:
+                    continue
+                n, epsilon, max_iter, A, b = data
+                print(f"\n[INFO] Данные из файла успешно загружены.")
 
-            print(f"Введите коэффициенты матрицы A и вектор b построчно:")
-            A = []
-            b = []
-            for i in range(n):
-                row_input = input(f"Строка {i + 1}: ").replace(',', '.').strip().split()
-                row = list(map(float, row_input))
-                A.append(row[:-1])
-                b.append(row[-1])
-        else:
-            sys.exit("Ошибка: Неверный режим.")
+            elif mode == '1':
+                n = get_valid_n()
+                epsilon = get_valid_epsilon()
+                max_iter = 1000
 
-        x_ans, iters, errors = gauss_seidel_method(A, b, epsilon, max_iter)
+                print(f"\nВведите коэффициенты матрицы A и вектор b построчно.")
+                print(f"Для размерности {n} каждая строка должна содержать ровно {n + 1} чисел.")
+                A = []
+                b = []
 
-        print("\n" + "=" * 30)
-        print("ИТОГОВЫЕ РЕЗУЛЬТАТЫ ВЫЧИСЛЕНИЙ")
-        print("=" * 30)
-        print("Вектор неизвестных x:")
-        for i in range(n):
-            print(f"  x_{i + 1} = {x_ans[i]:.6f}")
+                for i in range(n):
+                    row_A, val_b = get_valid_row(i, n)
+                    A.append(row_A)
+                    b.append(val_b)
 
-        print(f"\nОбщее количество итераций: {iters}")
-        print("\nВектор погрешностей |x_i^(k) - x_i^(k-1)| на последнем шаге:")
-        for i in range(n):
-            print(f"  e_{i + 1} = {errors[i]:.6e}")
+            try:
+                x_ans, iters, errors = gauss_seidel_method(A, b, epsilon, max_iter)
 
-    except Exception as e:
-        print(f"\n[ОШИБКА ВЫПОЛНЕНИЯ] {e}")
+                print("\n" + "=" * 40)
+                print("ИТОГОВЫЕ РЕЗУЛЬТАТЫ ВЫЧИСЛЕНИЙ")
+                print("=" * 40)
+                print("Вектор неизвестных x:")
+                for i in range(n):
+                    print(f"  x_{i + 1} = {x_ans[i]:.6f}")
+
+                print(f"\nОбщее количество итераций: {iters}")
+                print("\nВектор погрешностей |x_i^(k) - x_i^(k-1)| на последнем шаге:")
+                for i in range(n):
+                    print(f"  e_{i + 1} = {errors[i]:.6e}")
+                print("\n")
+
+            except Exception as math_err:
+                print(f"\n[МАТЕМАТИЧЕСКАЯ ОШИБКА] {math_err}")
+                print("Попробуйте ввести другие данные.\n")
+
+    except KeyboardInterrupt:
+        print("\n\nВыполнение прервано пользователем (Ctrl+C). До связи!")
+        sys.exit(0)
 
 
 if __name__ == "__main__":
