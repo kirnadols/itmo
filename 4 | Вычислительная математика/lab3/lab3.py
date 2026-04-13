@@ -25,7 +25,7 @@ def read_safe_float(prompt):
 
 
 def f1(x):
-    return -x ** 3 - x ** 2 - 2 * x + 1
+    return x ** 3 - 3 * x ** 2 + 7 * x - 10
 
 
 def f2(x):
@@ -51,7 +51,7 @@ def f5(x):
 
 def exact_integral_variant1(a, b):
     def F(x):
-        return -(x ** 4) / 4.0 - (x ** 3) / 3.0 - x ** 2 + x
+        return (x ** 4) / 4.0 - (x ** 3) + 3.5 * x ** 2 - 10 * x
 
     return F(b) - F(a)
 
@@ -117,11 +117,11 @@ def run_integration(method_name, method_shader, f, a, b, eps, k):
 def main():
     print("=== Лабораторная работа №3. Численное интегрирование ===")
     print("Доступные функции:")
-    print("1. f(x) = -x^3 - x^2 - 2x + 1 (Вариант 1)")
+    print("1. f(x) = -x^3 - x^2 - 2x + 1 (Вариант 10)")
     print("2. f(x) = sin(x)")
     print("3. f(x) = 1/x")
-    print("4. f(x) = sin(100x) * exp(-x^2) (Осциллятор - Убийца Рунге)")
-    print("5. f(x) = Сумма(1..100) sin(x*i)*cos(x/i) (Compute-Bound - Убийца CPU)")
+    print("4. f(x) = sin(100x) * exp(-x^2) (Осциллятор)")
+    print("5. f(x) = Сумма(1..100) sin(x*i)*cos(x/i) (Убийца CPU)")
 
     func_id = read_safe_int("\nВведите номер функции (1-5): ", 1, 5)
 
